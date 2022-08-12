@@ -1,14 +1,14 @@
 '''
     RoboVac - clean the room
     note: PyGame needs an empty file __init__.py in directory to draw!
-
+    v. 0.90
 '''
 
 import random
 
 import pygame
 import sys
-from RoboVac0 import RoboVac
+from RoboVac1 import RoboVac
 
 BLACK = (0, 0, 0)
 GOLD = (200,0, 0)
@@ -158,9 +158,11 @@ class Room:
 def get_date_time():
     import datetime
     today = datetime.date.today()
-    hour = datetime.datetime.now().hour
-    min = datetime.datetime.now().minute
-    return f"{today} {hour}:{min}"
+    hour  = datetime.datetime.now().hour
+    min   = datetime.datetime.now().minute
+    hour_str = f"{hour:02d}"
+    min_str  = f"{min:02d}"
+    return f"{today} {hour_str}:{min_str}"
 
 #  Utility Functions for Drawing (PyGame) -----------------------
 def draw_tile(room,x,y):
@@ -210,7 +212,7 @@ def main(game_level):
     global SCREEN
 
     # max # game cycles allowed robot
-    max_cycles = 100
+    max_cycles = 400
 
     # create the room - pass in the level
     room = Room(game_level)
@@ -231,7 +233,7 @@ def main(game_level):
     pygame.display.update()
 
     ## CONTROL GAME SPEED
-    pygame.time.delay(1000)  # game delay in milliseconds between cycles
+    delay_time = 200  # game delay in milliseconds between cycles
 
     move_count = 0  # track number of moves
 
@@ -259,7 +261,7 @@ def main(game_level):
                   f"Efficiency: {(room.max_tiles/move_count):.2f}"
                   )
             # results to logfile
-            result_str = f"{get_date_time()}\t {robo_vac.id}" \
+            result_str = f"{get_date_time()} {robo_vac.id}" \
                          f" {robo_vac.name} " \
               f" L{room.game_level} " \
               f"Coverage:{((len(room.clean_set)/room.max_tiles)):.2f} " \
@@ -315,7 +317,7 @@ def main(game_level):
             pygame.display.update()
 
             # CONTROLS GAME SPEED
-            pygame.time.delay(200)
+            pygame.time.delay(delay_time)
 
             # REQUIRED for PyGame - close window,stop game
             for event in pygame.event.get():
@@ -339,5 +341,5 @@ if __name__ == '__main__':
             4 = 9 blocks
             5 = 10 blocks
     '''
-    game_level = 0
+    game_level = 5
     main(game_level)
